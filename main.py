@@ -37,5 +37,49 @@ def generate_sound(hz, seconds, bitrate=16000):
 
     p.terminate()
 
+def generate_many_sounds(sounds, bitrate=16000):
+    p = pyaudio.PyAudio()
+    stream = p.open(format=p.get_format_from_width(1),
+                    channels=1,
+                    rate=bitrate,
+                    output=True)
+
+    for hz, seconds in sounds:
+        bitrate = max(bitrate, hz+100)
+        num_frames = int(bitrate * seconds)
+        rest_frames = num_frames % bitrate
+
+        wave_data = ""
+
+        for x in range(num_frames):
+            wave_data = wave_data + chr(
+                int(
+                    math.sin(x / ((bitrate / hz) / math.pi)) * 127 + 128
+                )
+            )
+
+
+        for x in range(rest_frames):
+            wave_data = wave_data + chr(127)
+
+        stream.write(wave_data)
+
+    stream.stop_stream()
+    stream.close()
+
+    p.terminate()
+
 if __name__ == "__main__":
-    generate_sound(500, 5)
+    generate_sound(500, 0.1)
+    generate_sound(600, 0.1)
+    generate_sound(700, 0.1)
+    generate_sound(600, 0.1)
+    generate_sound(500, 0.1)
+
+    generate_many_sounds([
+        (500, 0.1),
+        (600, 0.1),
+        (700, 0.1),
+        (600, 0.1),
+        (500, 0.1)
+    ])
