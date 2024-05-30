@@ -23,8 +23,8 @@ def generate_sound(hz, seconds, bitrate=16000):
 
 
     for x in range(rest_frames):
-        wave_data = wava_data + chr(128)
-
+        wave_data = wave_data + chr(127)  # original code used 128, which led to high-pitched noise, whereas 127 is not audible
+        
     p = pyaudio.PyAudio()
     stream = p.open(format=p.get_format_from_width(1),
                     channels=1,
