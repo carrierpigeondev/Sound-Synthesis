@@ -1,13 +1,13 @@
-"""
-adapted from
-https://stackoverflow.com/questions/9770073/sound-generation-synthesis-with-python
-response by Liam
-"""
-
 import math
 import pyaudio
 
-def generate_sound(bitrate, hz, seconds):
+def generate_sound(hz, seconds, bitrate=16000):
+    """
+    Adapted from:
+    https://stackoverflow.com/questions/9770073/sound-generation-synthesis-with-python
+    Response by Liam
+    """
+    
     bitrate = max(bitrate, hz+100)
     num_frames = int(bitrate * seconds)
     rest_frames = num_frames % bitrate
@@ -37,4 +37,5 @@ def generate_sound(bitrate, hz, seconds):
 
     p.terminate()
 
-generate_sound(16000, 500, 1)
+if __name__ == "__main__":
+    generate_sound(500, 5)
